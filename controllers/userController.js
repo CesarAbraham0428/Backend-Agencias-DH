@@ -487,7 +487,7 @@ const obtenerEmailsUsuarios = (callback) => {
 };
 
  //Función para enviar correos a los usuarios obtenidos
- /*const enviarCorreosATodosLosUsuarios = () => {
+ const enviarCorreosATodosLosUsuarios = () => {
     obtenerEmailsUsuarios((error, correos) => {
         if (error) {
             console.error("Error al obtener correos:", error);
@@ -525,7 +525,7 @@ const obtenerEmailsUsuarios = (callback) => {
 };
 
 enviarCorreosATodosLosUsuarios(); 
-*/
+
 
 // Programar el envío de correos cada 2 días
 cron.schedule('0 0 */2 * *', () => {

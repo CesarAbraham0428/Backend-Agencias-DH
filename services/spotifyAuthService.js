@@ -45,7 +45,6 @@ class SpotifyAuthService {
                 expiresIn: response.data.expires_in
             };
         } catch (error) {
-            console.error('Error getting access token:', error);
             throw error;
         }
     }
@@ -70,7 +69,6 @@ class SpotifyAuthService {
                 expiresIn: response.data.expires_in
             };
         } catch (error) {
-            console.error('Error refreshing token:', error);
             throw error;
         }
     }

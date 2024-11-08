@@ -29,7 +29,6 @@ const getNearbyServices = {
 
       connection.query(query, [paqueteId], (error, results) => {
         if (error) {
-          console.error('Error encontrando servicios del paquete:', error);
           reject(error);
         } else {
           

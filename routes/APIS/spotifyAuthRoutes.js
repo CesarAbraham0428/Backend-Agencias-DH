@@ -19,7 +19,6 @@ router.get('/callback', async (req, res) => {
         
         res.redirect('/success'); // Redirige a tu frontend
     } catch (error) {
-        console.error('Auth callback error:', error);
         res.redirect('/error');
     }
 });

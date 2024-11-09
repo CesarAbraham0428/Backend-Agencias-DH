@@ -34,8 +34,7 @@ const foursquareController = {
                   place.photos = photos;
                   return place;
                 } catch (error) {
-                  console.error(`Skipping fsq_id ${place.fsq_id} due to error:`, error.message);
-                  return null; // Skip this place if fetching photos fails
+                  return null; 
                 }
               })
             );
@@ -55,7 +54,6 @@ const foursquareController = {
       });
 
       request.on('error', (error) => {
-        console.error('Error en la solicitud a Foursquare:', error);
         res.status(500).json({
           success: false,
           message: 'Error al realizar la búsqueda en Foursquare',
@@ -65,7 +63,6 @@ const foursquareController = {
 
       request.end();
     } catch (error) {
-      console.error('Error en el controlador de búsqueda:', error);
       res.status(500).json({
         success: false,
         message: 'Error interno del servidor',
@@ -100,7 +97,6 @@ const getPhotos = (fsq_id) => {
 
         // Check if the status code is not 200, indicating an error response
         if (response.statusCode !== 200) {
-          console.error(`Error fetching photos for fsq_id ${fsq_id}:`, body);
           resolve([]); // Resolve with an empty array if there’s an error
           return;
         }
@@ -111,14 +107,12 @@ const getPhotos = (fsq_id) => {
           const photos = data.map(photo => `${photo.prefix}original${photo.suffix}`);
           resolve(photos);
         } catch (error) {
-          console.error('Error parsing JSON response for photos:', error);
           resolve([]); // Resolve with an empty array if parsing fails
         }
       });
     });
 
     request.on('error', (error) => {
-      console.error('Error in Foursquare photo request:', error);
       reject(error);
     });
 

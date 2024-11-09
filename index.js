@@ -12,9 +12,7 @@ const gestorRoute = require('./routes/gestorRoutes');
 const apisRoutes = require('./routes/apis/geolocationRoutes');
 const weatherRoutes = require('./routes/apis/weatherRoutes');
 const spotifyRoutes = require('./routes/apis/spotifyRoutes');
-const foursquareController = require('./controllers/APIS/foursquareController');
-
-
+const foursquareController = require('./controllers/apis/foursquareController');
 
 
 // Configuración de la aplicación Express
@@ -53,9 +51,9 @@ app.get('/api/paypal-client-id', (req, res) => {
   
   
   // Global error handler
-app.use((err, req, res, next) => {
+app.use((err, res,) => {
     console.error(err.stack);
-    res.status(500).send('Something broke!');
+    res.status(500).send('Algo esta roto!');
 });
 
 module.exports = app;

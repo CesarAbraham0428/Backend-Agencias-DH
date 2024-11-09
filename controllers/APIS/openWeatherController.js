@@ -84,12 +84,6 @@ const getForecastData = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error detallado:', {
-            message: error.message,
-            response: error.response?.data,
-            status: error.response?.status,
-            config: error.config
-        });
 
         res.status(error.response?.status || 500).json({
             success: false,

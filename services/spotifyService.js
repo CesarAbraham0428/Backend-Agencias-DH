@@ -34,7 +34,6 @@ class SpotifyService {
             this.tokenExpirationTime = Date.now() + (response.data.expires_in - 300) * 1000;
             return this.token;
         } catch (error) {
-            console.error('Error al obtener token de Spotify:', error);
             throw error;
         }
     }
@@ -57,7 +56,6 @@ class SpotifyService {
                 genres: response.data.genres
             };
         } catch (error) {
-            console.error('Error al obtener información del artista:', error);
             throw error;
         }
     }
@@ -88,76 +86,7 @@ class SpotifyService {
                 uri: track.uri // Importante para agregar a playlist
             }));
         } catch (error) {
-            console.error('Error al obtener top tracks:', error);
             throw new Error(error.response?.data?.error?.message || 'Error al obtener las canciones del artista');
-        }
-    }
-
-    async addToPlaylist(userId, trackUri) {
-        try {
-            const token = await this.getAccessToken();
-            // Primero verificamos si ya existe una playlist para la aplicación
-            let playlistId = await this.getOrCreatePlaylist(userId);
-            
-            await axios.post(
-                `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
-                {
-                    uris: [trackUri]
-                },
-                {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                }
-            );
-            
-            return { success: true, message: 'Canción agregada a la playlist exitosamente' };
-        } catch (error) {
-            console.error('Error al agregar a playlist:', error);
-            throw error;
-        }
-    }
-
-    async getOrCreatePlaylist(userId) {
-        try {
-            const token = await this.getAccessToken();
-            
-            // Primero buscar si ya existe una playlist
-            const playlistName = 'Mi Playlist de José Alfredo Jiménez';
-            
-            const response = await axios.get(
-                `https://api.spotify.com/v1/users/${userId}/playlists`,
-                {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                }
-            );
-    
-            const existingPlaylist = response.data.items.find(
-                playlist => playlist.name === playlistName
-            );
-    
-            if (existingPlaylist) {
-                return existingPlaylist.id;
-            }
-    
-            // Si no existe, crear una nueva playlist
-            const createResponse = await axios.post(
-                `https://api.spotify.com/v1/users/${userId}/playlists`,
-                {
-                    name: playlistName,
-                    description: 'Playlist creada por la aplicación de Agencia de Viajes',
-                    public: false
-                },
-                {
-                    headers: { 
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-    
-            return createResponse.data.id;
-        } catch (error) {
-            console.error('Error al obtener/crear playlist:', error);
-            throw error;
         }
     }
 }

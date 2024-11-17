@@ -1,123 +1,44 @@
-const https = require('https');
+const FoursquareService = require('../../services/foursquareService');
 
-const foursquareController = {
+const FoursquareController = {
   buscarLugar: async (req, res) => {
     try {
       const { ll, query, radius, limit } = req.query;
 
-      const options = {
-        method: 'GET',
-        hostname: 'api.foursquare.com',
-        path: `/v3/places/search?ll=${encodeURIComponent(ll)}&query=${encodeURIComponent(query)}&radius=${encodeURIComponent(radius)}&limit=${encodeURIComponent(limit)}`,
-        headers: {
-          accept: 'application/json',
-          Authorization: 'fsq3zsmuEF2kL8pvUzYa06wskpwll/v+kKhij0vB0vS4N54='
-        }
-      };
-
-      const request = https.request(options, (response) => {
-        const chunks = [];
-
-        response.on('data', (chunk) => {
-          chunks.push(chunk);
-        });
-
-        response.on('end', async () => {
-          const body = Buffer.concat(chunks).toString();
-          const data = JSON.parse(body);
-
-          if (data && data.results && data.results.length > 0) {
-            const results = await Promise.all(
-              data.results.map(async (place) => {
-                try {
-                  const photos = await getPhotos(place.fsq_id);
-                  place.photos = photos;
-                  return place;
-                } catch (error) {
-                  return null; 
-                }
-              })
-            );
-
-            res.status(200).json({
-              success: true,
-              message: 'Lugares encontrados en Dolores Hidalgo',
-              data: results.filter((place) => place !== null) // Remove null entries
-            });
-          } else {
-            res.status(404).json({
-              success: false,
-              message: 'No se encontraron lugares'
-            });
-          }
-        });
-      });
-
-      request.on('error', (error) => {
-        res.status(500).json({
+      if (!ll || !query) {
+        return res.status(400).json({
           success: false,
-          message: 'Error al realizar la búsqueda en Foursquare',
-          error: error.message
+          message: 'Los parámetros ll y query son obligatorios'
         });
-      });
+      }
 
-      request.end();
+      const lugares = await FoursquareService.buscarLugares(ll, query, radius, limit);
+
+      const resultados = await Promise.all(
+        lugares.map(async (lugar) => {
+          try {
+            const fotos = await FoursquareService.obtenerFotos(lugar.fsq_id);
+            return { ...lugar, fotos };
+          } catch {
+            return null; // Manejo de errores individuales
+          }
+        })
+      );
+
+      res.status(200).json({
+        success: true,
+        message: 'Lugares encontrados',
+        data: resultados.filter((lugar) => lugar !== null) // Excluir lugares con errores
+      });
     } catch (error) {
+      console.error(error);
       res.status(500).json({
         success: false,
-        message: 'Error interno del servidor',
+        message: 'Error al buscar lugares en Foursquare',
         error: error.message
       });
     }
   }
 };
 
-// Función para obtener las fotos de un lugar dado su fsq_id
-const getPhotos = (fsq_id) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      method: 'GET',
-      hostname: 'api.foursquare.com',
-      path: `/v3/places/${fsq_id}/photos`,
-      headers: {
-        accept: 'application/json',
-        Authorization: 'fsq3zsmuEF2kL8pvUzYa06wskpwll/v+kKhij0vB0vS4N54='
-      }
-    };
-
-    const request = https.request(options, (response) => {
-      const chunks = [];
-
-      response.on('data', (chunk) => {
-        chunks.push(chunk);
-      });
-
-      response.on('end', () => {
-        const body = Buffer.concat(chunks).toString();
-
-        // Check if the status code is not 200, indicating an error response
-        if (response.statusCode !== 200) {
-          resolve([]); // Resolve with an empty array if there’s an error
-          return;
-        }
-
-        // Try to parse JSON and handle any errors
-        try {
-          const data = JSON.parse(body);
-          const photos = data.map(photo => `${photo.prefix}original${photo.suffix}`);
-          resolve(photos);
-        } catch (error) {
-          resolve([]); // Resolve with an empty array if parsing fails
-        }
-      });
-    });
-
-    request.on('error', (error) => {
-      reject(error);
-    });
-
-    request.end();
-  });
-};
-
-module.exports = foursquareController;
+module.exports = FoursquareController;

@@ -9,10 +9,10 @@ const adminRoute = require('./routes/adminRoutes');
 const gestorRoute = require('./routes/gestorRoutes');
 
 //Rutas Apis
-const apisRoutes = require('./routes/apis/geolocationRoutes');
+const geolocationRoutes = require('./routes/apis/geolocationRoutes');
 const weatherRoutes = require('./routes/apis/weatherRoutes');
 const spotifyRoutes = require('./routes/apis/spotifyRoutes');
-const foursquareController = require('./controllers/apis/foursquareController');
+const foursquareRoutes = require('./routes/apis/foursquareRoutes');
 
 
 // Configuración de la aplicación Express
@@ -44,11 +44,10 @@ app.get('/api/paypal-client-id', (req, res) => {
 
   //Apis nuevas
   
-  app.use('/api', apisRoutes);
+  app.use('/api/routes', geolocationRoutes);
   app.use('/api/weather', weatherRoutes);
   app.use('/api/spotify', spotifyRoutes);
-  app.get('/api/buscar-lugar', foursquareController.buscarLugar);
-  
+  app.use('/api/foursquare', foursquareRoutes);
   
   // Global error handler
 app.use((err, res,) => {

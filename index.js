@@ -18,17 +18,22 @@ const foursquareRoutes = require('./routes/apis/foursquareRoutes');
 // Configuración de la aplicación Express
 const app = express();
 
-// Middleware
+// Configuración de CORS
 app.use(cors({
-    origin: ['http://localhost:4200', 'https://agencia-dh.vercel.app'], // permite varias fuentes
+    origin: [
+      'http://localhost:4200', 
+      'https://senderosdh.vercel.app',
+    ],
     optionsSuccessStatus: 200,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true
-}));
-
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept']
+  }));
+  
+  
 // Middleware para parsear JSON y URL-encoded
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/usuario', usuarioRoute);
@@ -37,19 +42,20 @@ app.use('/gestor', gestorRoute);
 
 //Apis
 
+//PayPal
 app.get('/api/paypal-client-id', (req, res) => {
     const paypalClientId = process.env.PAYPAL_CLIENT_ID;
     res.json({ clientId: paypalClientId });
   });
 
-  //Apis nuevas
+  //Apis de geolocation, weather, spotify y foursquare
   
-  app.use('/api/routes', geolocationRoutes);
+  app.use('/api/geolocalizacion', geolocationRoutes);
   app.use('/api/weather', weatherRoutes);
   app.use('/api/spotify', spotifyRoutes);
   app.use('/api/foursquare', foursquareRoutes);
   
-  // Global error handler
+// Manejo de errores mejorado
 app.use((err, res,) => {
     console.error(err.stack);
     res.status(500).send('Algo esta roto!');

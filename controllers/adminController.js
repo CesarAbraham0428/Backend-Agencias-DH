@@ -335,7 +335,6 @@ exports.getPaquetesCompletosByAgencia = (req, res) => {
 
   connection.query(query, (error, results) => {
     if (error) {
-      console.error('Error al obtener los paquetes completos:', error);
       return res.status(500).json({ error: 'Error al obtener los paquetes completos' });
     }
 

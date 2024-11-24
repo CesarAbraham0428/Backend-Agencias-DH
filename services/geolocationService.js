@@ -1,7 +1,7 @@
 const connection = require('../connection');
 
 const getNearbyServices = {
-  findNearbyServices: (latitude, longitude, radius = 5, paqueteId) => {
+  findNearbyServices: (latitude, longitude, radius = 5, paqueteId) => {//Es requerido aunque Visual te diaga que no es necesario
     return new Promise((resolve, reject) => {
       const query = `
         SELECT 

@@ -6,7 +6,6 @@ class SpotifyAuthService {
     constructor() {
         this.clientId = process.env.CLIENT_ID_A;
         this.clientSecret = process.env.CLIENT_SECRET_A;
-        this.redirectUri = process.env.REDIRECT_URI || 'http://localhost:3000/api/spotify/callback';
     }
 
     getAuthUrl() {

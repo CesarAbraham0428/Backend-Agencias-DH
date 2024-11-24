@@ -8,7 +8,6 @@ const verifyToken = (req, res, next) => {
     }
     if (token.startsWith('Bearer ')) {
         token = token.slice(7); // Remove 'Bearer ' prefix
-        // console.log(token);
     }    
 
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {

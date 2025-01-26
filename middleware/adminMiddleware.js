@@ -1,3 +1,4 @@
+//middleware\adminMiddleware.js
 require("dotenv").config();
 
 const isAdmin = (req, res, next) => {

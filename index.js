@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const multer = require('multer');
-const upload = multer();
+
+const authRoutes = require('./routes/apis/authRoutes');
 
 // Rutas Users
 const usuarioRoute = require('./routes/usuarioRoutes');
@@ -42,11 +42,13 @@ app.use('/gestor', gestorRoute);
 
 //Apis
 
+app.use('/api/auth', authRoutes);
+
 //PayPal
 app.get('/api/paypal-client-id', (req, res) => {
-    const paypalClientId = process.env.PAYPAL_CLIENT_ID;
-    res.json({ clientId: paypalClientId });
-  });
+  const paypalClientId = process.env.PAYPAL_CLIENT_ID;
+  res.json({ clientId: paypalClientId });
+});
 
   //Apis de geolocation, weather, spotify y foursquare
   

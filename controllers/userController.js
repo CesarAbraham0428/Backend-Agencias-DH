@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken');
 require("dotenv").config();
 const nodemailer = require('nodemailer');
 const cron = require('node-cron');
-const multer = require('multer');
-const upload = multer({ storage: multer.memoryStorage() });
+
+
 
 // Configuración del transportador con una cuenta de Gmail
 const transporter = nodemailer.createTransport({

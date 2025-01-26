@@ -10,10 +10,16 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.sendSuperToken = async (email, token) => {
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'Tu Código de Acceso',
-    text: `Ingresa este código para continuar: ${token}`
-  });
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Tu SuperToken',
+      text: `Tu código es: ${token}`
+    });
+    console.log('Correo enviado a:', email); // 👈 Confirmar envío
+  } catch (error) {
+    console.error('Error enviando correo:', error); // 👈 Verifica credenciales
+    throw new Error('No se pudo enviar el token');
+  }
 };

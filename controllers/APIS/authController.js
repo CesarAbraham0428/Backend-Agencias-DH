@@ -36,14 +36,12 @@ exports.requestSuperToken = async (req, res) => {
 // Método login tradicional (JWT)
 exports.login = async (req, res) => {
   try {
-    console.log('Body recibido:', req.body);
 
     const { email, password } = req.body;
 
     // 1. Buscar usuario en MySQL
     const query = 'SELECT * FROM Usuario WHERE email_usr = ?';
     const [results] = await connection.promise().query(query, [email]);
-    console.log('Resultados de la query:', results);
 
     if (results.length === 0) {
       return res.status(401).json({ error: "Credenciales inválidas" });
@@ -67,7 +65,6 @@ exports.login = async (req, res) => {
     res.json({ message: "Token enviado a tu correo" });
 
   } catch (error) {
-    console.error('Error en /api/auth/login:', error); // Agrega esto para ver el error real
     res.status(500).json({ error: error.message });
   }
 };

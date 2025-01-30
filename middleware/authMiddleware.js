@@ -8,7 +8,7 @@ const verifyToken = (req, res, next) => {
         return res.status(403).json({ error: 'No token provided' });
     }
     if (token.startsWith('Bearer ')) {
-        token = token.slice(7); // Remove 'Bearer ' prefix
+        token = token.slice(7); // Remover 'Bearer ' prefix
     }    
 
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
@@ -16,7 +16,7 @@ const verifyToken = (req, res, next) => {
             return res.status(401).json({ error: 'Unauthorized' });
         }
         req.usuarioId = decoded.id;
-        req.usuarioRole = decoded.role; // Añadir el role del usuario al request
+        req.usuarioRole = decoded.role; // Añadir el role del usuario al request (Peticion)
         next();
     });
 };

@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 const crypto = require('crypto');
 const bcrypt = require("bcryptjs");
 
-
 const { saveSuperToken, validateSuperToken } = require('../../services/tokenStore');
 const { sendSuperToken } = require('../../services/emailService');
 

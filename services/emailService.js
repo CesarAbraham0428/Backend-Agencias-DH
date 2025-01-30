@@ -17,9 +17,9 @@ exports.sendSuperToken = async (email, token) => {
       subject: 'Tu SuperToken',
       text: `Tu código es: ${token}`
     });
-    console.log('Correo enviado a:', email); // 👈 Confirmar envío
+    console.log('Correo enviado a:', email); //  Confirmar envío
   } catch (error) {
-    console.error('Error enviando correo:', error); // 👈 Verifica credenciales
+    console.error('Error enviando correo:', error); //  Verifica credenciales
     throw new Error('No se pudo enviar el token');
   }
 };

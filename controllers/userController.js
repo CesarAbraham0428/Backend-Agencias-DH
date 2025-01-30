@@ -219,7 +219,8 @@ const loginUser = (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ id: usuario.id_usr, email: usuario.email_usr, role: usuario.role }, process.env.ACCESS_TOKEN, { expiresIn: '8h' });
+        const token = jwt.sign({ id: usuario.id_usr, email: usuario.email_usr, role: usuario.role }, process.env.ACCESS_TOKEN,
+             { expiresIn: '1h' });
 
         res.status(200).json({ token });
     });
@@ -485,6 +486,7 @@ const obtenerEmailsUsuarios = (callback) => {
         callback(null, emails);
     });
 };
+/*
 
  //Función para enviar correos a los usuarios obtenidos
  const enviarCorreosATodosLosUsuarios = () => {
@@ -527,7 +529,8 @@ const obtenerEmailsUsuarios = (callback) => {
 enviarCorreosATodosLosUsuarios(); 
 
 
-// Programar el envío de correos cada 2 días
+/*Programar el envío de correos cada 2 días*/
+
 cron.schedule('0 0 */2 * *', () => {
     console.log('Enviando correos cada 2 días...');
     enviarCorreosATodosLosUsuarios();
@@ -565,7 +568,7 @@ const enviarTicket = async (req, res) => {
             contentType: 'application/pdf'
           }
         ]
-      };
+      }; 
 
       // Enviar el correo
       await transporter.sendMail(mailOptions);

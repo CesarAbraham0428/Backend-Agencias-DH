@@ -18,3 +18,4 @@ router.delete('/agencia/:id_agencia', verifyToken, isGestor, gestorController.de
 
 
 module.exports = router;
+
